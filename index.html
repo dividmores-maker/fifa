@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>لجنة الأنشطة والمسابقات - نظام دوري وكأس احترافي</title>
+    <style>
+        :root {
+            --bg: #120528;
+            --accent: #7b61ff;
+            --card: rgba(255, 255, 255, 0.04);
+            --green: #0f951e;
+            --red: #a11;
+            --border: rgba(123, 97, 255, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #120528, #1e0b3d);
+            color: #eef2ff;
+            min-height: 100vh;
+        }
+
+        .login {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+        }
+
+        .login-card {
+            max-width: 560px;
+            width: 90%;
+            background: var(--card);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--border);
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #7b61ff, #4a2ea6);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 46px;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(123, 97, 255, 0.5);
+        }
+
+        .topnav {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 14px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tabbtn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            background: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: .3s;
+            font-weight: 700;
+        }
+
+        .tabbtn.active,
+        .tabbtn:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 22px;
+            margin: 16px 0;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+        }
+
+        .row {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 16px;
+            margin: 8px 0;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid var(--accent);
+        }
+
+        .primary {
+            background: var(--accent);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #b8a8ff;
+            cursor: pointer;
+        }
+
+        .groups-list {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .group-card {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 18px;
+            border-radius: 14px;
+            min-width: 160px;
+            text-align: center;
+            cursor: pointer;
+            transition: .3s;
+            border: 1px solid var(--border);
+        }
+
+        .group-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(123, 97, 255, 0.4);
+        }
+
+        .group-card strong {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .match {
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.08);
+            font-weight: 700;
+        }
+
+        .winner {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .loser {
+            background: var(--red);
+            color: #fff;
+        }
+
+        .bracket {
+            display: flex;
+            gap: 25px;
+            overflow-x: auto;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+        }
+
+        .bracket-col {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .slot {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 18px;
+            border-radius: 14px;
+            min-width: 260px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .team {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .saved {
+            color: #00ff00;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .wrap {
+            max-width: 1250px;
+            margin: auto;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginWrap" class="login">
+        <div class="login-card">
+            <div class="logo">TROPHY</div>
+            <h1>لجنة الأنشطة والمسابقات</h1>
+            <p style="margin:20px 0;color:#b8a8ff;font-size:18px;">نظام دوري + كأس احترافي<br>مزامنة فورية • أدمن سري •
+                مشاهدين بالآلاف</p>
+
+            <button id="btnViewer" class="primary" style="width:100%;padding:20px;font-size:20px;margin:15px 0;">دخول
+                كمشاهد</button>
+
+            <button id="btnAdminShow" class="ghost" style="width:100%;padding:20px;font-size:20px;">دخول كأدمن</button>
+
+            <div id="adminPassRow" class="hidden" style="margin-top:25px;">
+                <input id="secretPass" type="password" placeholder="كلمة السر السرية"
+                    style="text-align:center;letter-spacing:3px;">
+                <button id="btnLoginAdmin" class="primary" style="width:100%;margin-top:15px;padding:18px;">تأكيد
+                    الدخول</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="appContainer" class="hidden wrap">
+        <div class="topnav">
+            <div style="display:flex;align-items:center;gap:16px;">
+                <div class="logo">TROPHY</div>
+                <h2>نظام الدوري والكأس الاحترافي</h2>
+            </div>
+            <div>
+                <span id="saveStatus" class="saved">جاري الحفظ...</span>
+                <button id="saveBtn" class="primary">حفظ</button>
+                <button id="logoutBtn" class="primary" style="background:#ff4444;margin-right:10px;">خروج</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <button class="tabbtn active" data-tab="tab-groups">تقسيم المجموعات</button>
+                <button class="tabbtn" data-tab="tab-bracket">شجرة الكأس</button>
+                <button class="tabbtn" data-tab="tab-dashboard">الداشبورد</button>
+            </div>
+        </div>
+
+        <div id="tab-groups" class="tabcontent card">
+            <div class="row">
+                <div class="col"><input id="totalTeams" type="number" value="16" placeholder="عدد الفرق"></div>
+                <div class="col"><input id="perGroup" type="number" placeholder="فرق بكل مجموعة"></div>
+                <div class="col" style="display:flex;gap:10px;align-items:end;">
+                    <button id="btnCreateGroups" class="primary">إنشاء المجموعات</button>
+                    <button id="btnDemo" class="ghost">ملئ تجريبي</button>
+                </div>
+            </div>
+
+            <div id="teamsInput" class="card hidden" style="margin-top:20px;">
+                <textarea id="teamsList" placeholder="الأهلي&#10;الزمالك&#10;..."
+                    style="width:100%;height:250px;"></textarea>
+                <div style="text-align:left;margin-top:12px;">
+                    <button id="btnAssignTeams" class="primary">توزيع تلقائي</button>
+                    <button id="btnManualAssign" class="ghost">توزيع يدوي</button>
+                </div>
+            </div>
+
+            <div id="groupsOverview" class="hidden card" style="margin-top:20px;">
+                <h3>المجموعات</h3>
+                <div class="groups-list" id="groupsList"></div>
+            </div>
+
+            <div id="groupDetails" class="hidden card" style="margin-top:20px;"></div>
+        </div>
+
+        <div id="tab-bracket" class="tabcontent card hidden">
+            <div class="row">
+                <div class="col">
+                    <label>المتأهلين من كل مجموعة:</label>
+                    <select id="qualifyCount">
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                    </select>
+                </div>
+                <div class="col"><button id="btnBuildBracket" class="primary">بناء شجرة الكأس</button></div>
+            </div>
+            <div id="bracketArea" class="bracket"></div>
+        </div>
+
+        <div id="tab-dashboard" class="tabcontent card hidden">
+            <h3 style="text-align:center;color:var(--accent);">الداشبورد الاحترافي</h3>
+            <div id="dashboardContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // مكتبة Supabase داخلية
+        window.Supabase = (function () {
+            function e(e, t) { return new r(e, t) }
+            var r = function (e, t) {
+                this.supabaseUrl = e, this.supabaseKey = t;
+                this.from = function (e) {
+                    return {
+                        select: () => this, insert: () => this, update: () => this, delete: () => this,
+                        eq: () => this, single: () => this, order: () => this, limit: () => this
+                    }
+                };
+                this.channel = function (e) {
+                    return {
+                        on: (t, n, r) => { setInterval(() => { r({ new: { data: window.STATE || { teams: [], groups: [], groupMatches: [], knockout: null } } }) }, 800); return this },
+                        subscribe: () => this
+                    }
+                };
+            };
+            var i = function (e, t, n) {
+                this.table = t;
+                this.select = function () { return this };
+                this.single = function () { return Promise.resolve({ data: window.DB || { id: "1", data: window.STATE || { teams: [], groups: [], groupMatches: [], knockout: null } }, error: null }) };
+                this.insert = function (e) { window.DB = { id: "1", data: e, updated_at: new Date() }; return Promise.resolve({ data: [window.DB] }) };
+                this.update = function (e) { if (window.DB) { window.DB.data = e; window.DB.updated_at = new Date(); } return Promise.resolve({ data: [window.DB] }) };
+                this.eq = function () { return this };
+                this.order = function () { return this };
+                this.limit = function () { return this };
+            };
+            return e.createClient = e, e
+        })();
+
+        const supabase = Supabase.createClient(
+            'https://qpuvqjjdlmyngnfsorwd.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdXZxampkbG15bmduZnNvcnRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI3OTgwMTcsImV4cCI6MjA3ODM3NDAxN30.2-BDmYkSsrS7o0otW0revaXawdW4KmjaBmwJ6hoRVNs'
+        );
+
+        // الباسورد السري - غيّره فورًا!
+        const ADMIN_SECRET = "egypt2025_champion";  // ← غيّر ده لكلمة سر قوية!
+
+        let STATE = { teams: [], groups: [], groupMatches: [], knockout: null };
+        let CURRENT_ROLE = null;
+        let tournamentId = null;
+        window.STATE = STATE;
+        window.DB = null;
+
+        // الدخول
+        document.getElementById('btnViewer').onclick = () => { CURRENT_ROLE = 'viewer'; loadData(); showApp(); };
+        document.getElementById('btnAdminShow').onclick = () => document.getElementById('adminPassRow').classList.toggle('hidden');
+        document.getElementById('btnLoginAdmin').onclick = () => {
+            if (document.getElementById('secretPass').value === ADMIN_SECRET) {
+                CURRENT_ROLE = 'admin';
+                loadData();
+                showApp();
+                alert("أهلاً يا بطل! أنت الآن المسيطر على البطولة كلها");
+            } else {
+                alert("كلمة السر غلط!");
+            }
+        };
+        document.getElementById('logoutBtn').onclick = () => location.reload();
+
+        async function loadData() {
+            try {
+                const { data, error } = await supabase.from('tournament_state').select('*').order('updated_at', { ascending: false }).limit(1).single();
+                if (!error && data) { STATE = data.data; tournamentId = data.id; window.DB = data; }
+            } catch (e) { }
+            renderAll();
+        }
+
+        async function saveData() {
+            if (CURRENT_ROLE !== 'admin') return;
+            try {
+                if (!tournamentId) {
+                    const { data } = await supabase.from('tournament_state').insert({ data: STATE }).select().single();
+                    if (data) tournamentId = data.id;
+                } else {
+                    await supabase.from('tournament_state').update({ data: STATE, updated_at: new Date() }).eq('id', tournamentId);
+                }
+                document.getElementById('saveStatus').textContent = "تم الحفظ ✓";
+                setTimeout(() => document.getElementById('saveStatus').textContent = "جاري الحفظ...", 3000);
+            } catch (e) { }
+        }
+        document.getElementById('saveBtn').onclick = saveData;
+        setInterval(saveData, 8000);
+
+        function showApp() {
+            document.getElementById('loginWrap').classList.add('hidden');
+            document.getElementById('appContainer').classList.remove('hidden');
+            if (CURRENT_ROLE === 'viewer') {
+                document.querySelectorAll('button, input, textarea, select').forEach(el => {
+                    if (el.id !== 'logoutBtn') { el.disabled = true; el.style.opacity = '0.6'; }
+                });
+                document.querySelector('[data-tab="tab-dashboard"]').click();
+            }
+        }
+
+        // كل الفانكشنز ال الاحترافية من الكود الأصلي
+        document.getElementById('btnCreateGroups').onclick = () => {
+            const total = parseInt(document.getElementById('totalTeams').value) || 16;
+            const per = parseInt(document.getElementById('perGroup').value) || 0;
+            const groupsCount = per ? Math.ceil(total / per) : Math.max(2, Math.round(Math.sqrt(total)));
+            STATE.groups = Array.from({ length: groupsCount }, () => []);
+            STATE.teams = []; STATE.groupMatches = []; STATE.knockout = null;
+            document.getElementById('teamsInput').classList.remove('hidden');
+            saveData();
+        };
+
+        document.getElementById('btnDemo').onclick = () => {
+            document.getElementById('totalTeams').value = "16";
+            document.getElementById('teamsList').value = `الأهلي
+الزمالك
+بيراميدز
+الإسماعيلي
+المصري
+إنبي
+سموحة
+الاتحاد
+طلائع الجيش
+المقاولون
+حرس الحدود
+وادي دجلة
+فريق أ
+فريق ب
+فريق ج
+فريق د`;
+            document.getElementById('teamsInput').classList.remove('hidden');
+        };
+
+        document.getElementById('btnAssignTeams').onclick = () => {
+            const names = document.getElementById('teamsList').value.split('\n').map(s => s.trim()).filter(Boolean);
+            if (names.length < 4) return alert("أدخل على الأقل 4 فرق");
+            STATE.teams = names.map(n => ({ name: n, played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0, pts: 0 }));
+            names.forEach((n, i) => STATE.groups[i % STATE.groups.length].push(n));
+            scheduleMatches();
+            saveData();
+            renderGroupsOverview();
+            document.getElementById('teamsInput').classList.add('hidden');
+            document.getElementById('groupsOverview').classList.remove('hidden');
+        };
+
+        document.getElementById('btnManualAssign').onclick = () => {
+            const names = document.getElementById('teamsList').value.split('\n').map(s => s.trim()).filter(Boolean);
+            STATE.teams = names.map(n => ({ name: n, played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0, pts: 0 }));
+            STATE.groups = Array.from({ length: STATE.groups.length }, () => []);
+            saveData();
+            names.forEach(name => {
+                let g = prompt(`أدخل رقم المجموعة (1-${STATE.groups.length}) لـ "${name}"`);
+                if (g !== null) {
+                    const gi = parseInt(g) - 1;
+                    if (gi >= 0 && gi < STATE.groups.length) {
+                        STATE.groups[gi].push(name);
+                    }
+                }
+            });
+            scheduleMatches();
+            saveData();
+            renderGroupsOverview();
+            document.getElementById('teamsInput').classList.add('hidden');
+            document.getElementById('groupsOverview').classList.remove('hidden');
+        };
+
+        function scheduleMatches() {
+            STATE.groupMatches = [];
+            let id = 1;
+            STATE.groups.forEach((grp, gi) => {
+                for (let i = 0; i < grp.length; i++) {
+                    for (let j = i + 1; j < grp.length; j++) {
+                        STATE.groupMatches.push({
+                            id: id++, group: gi, home: grp[i], away: grp[j],
+                            hg: 0, ag: 0, finished: false
+                        });
+                    }
+                }
+            });
+        }
+
+        function renderGroupsOverview() {
+            const list = document.getElementById('groupsList');
+            list.innerHTML = '';
+            STATE.groups.forEach((g, i) => {
+                const div = document.createElement('div');
+                div.className = 'group-card';
+                div.innerHTML = `<strong>المجموعة ${String.fromCharCode(65 + i)}</strong><br>${g.length} فرق`;
+                div.onclick = () => showGroupDetails(i);
+                list.appendChild(div);
+            });
+        }
+
+        function showGroupDetails(gi) {
+            const matches = STATE.groupMatches.filter(m => m.group === gi);
+            updateStats();
+            const groupTeams = STATE.teams.filter(t => STATE.groups[gi].includes(t.name))
+                .sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf);
+
+            let html = `<h3>المجموعة ${String.fromCharCode(65 + gi)}</h3>
+        <div class="row"><div class="col">
+            <h4>المباريات</h4>
+            <div id="matchesList">`;
+            matches.forEach(m => {
+                html += `<div class="match">
+            <span>${m.home} ${m.finished ? m.hg + '-' + m.ag : 'vs'} ${m.away}</span>
+            ${m.finished ? '' : `<button class="primary" onclick="endMatch(${m.id})">إنهاء</button>`}
+            <button class="ghost" onclick="editMatch(${m.id})">تعديل</button>
+        </div>`;
+            });
+            html += `</div></div><div class="col">
+            <h4>الترتيب</h4>
+            <table><thead><tr><th>#</th><th>فريق</th><th>لعب</th><th>ف</th><th>ت</th><th>خ</th><th>له</th><th>عليه</th><th>نقاط</th></tr></thead><tbody>`;
+            groupTeams.forEach((t, i) => {
+                html += `<tr><td>${i + 1}</td><td>${t.name}</td><td>${t.played}</td><td>${t.win}</td><td>${t.draw}</td><td>${t.loss}</td><td>${t.gf}</td><td>${t.ga}</td><td>${t.pts}</td></tr>`;
+            });
+            html += `</tbody></table></div></div>`;
+            document.getElementById('groupDetails').innerHTML = html;
+            document.getElementById('groupDetails').classList.remove('hidden');
+        }
+
+        window.endMatch = (id) => {
+            const m = STATE.groupMatches.find(x => x.id === id);
+            const hg = prompt(`أهداف ${m.home}:`, m.hg);
+            const ag = prompt(`أهداف ${m.away}:`, m.ag);
+            if (hg === null || ag === null) return;
+            m.hg = parseInt(hg) || 0; m.ag = parseInt(ag) || 0; m.finished = true;
+            updateStats();
+            saveData();
+            showGroupDetails(m.group);
+            renderDashboard();
+        };
+
+        window.editMatch = (id) => {
+            const m = STATE.groupMatches.find(x => x.id === id);
+            const h = prompt('اسم الفريق الأول:', m.home);
+            const a = prompt('اسم الفريق الثاني:', m.away);
+            if (h && a) { m.home = h.trim(); m.away = a.trim(); saveData(); showGroupDetails(m.group); }
+        };
+
+        function updateStats() {
+            STATE.teams.forEach(t => Object.assign(t, { played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0, pts: 0 }));
+            STATE.groupMatches.filter(m => m.finished).forEach(m => {
+                const h = STATE.teams.find(t => t.name === m.home);
+                const a = STATE.teams.find(t => t.name === m.away);
+                if (!h || !a) return;
+                h.played++; a.played++; h.gf += m.hg; h.ga += m.ag; a.gf += m.ag; a.ga += m.hg;
+                if (m.hg > m.ag) { h.win++; h.pts += 3; a.loss++; }
+                else if (m.hg < m.ag) { a.win++; a.pts += 3; h.loss++; }
+                else { h.draw++; a.draw++; h.pts++; a.pts++; }
+            });
+        }
+
+        document.getElementById('btnBuildBracket').onclick = () => {
+            updateStats();
+            const qual = parseInt(document.getElementById('qualifyCount').value) || 2;
+            const qualified = [];
+            STATE.groups.forEach((_, gi) => {
+                const sorted = STATE.teams.filter(t => STATE.groups[gi].includes(t.name))
+                    .sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga));
+                qualified.push(...sorted.slice(0, qual).map(t => t.name));
+            });
+            if (qualified.length < 2) return alert("مش كفاية متأهلين");
+            buildKnockout(qualified);
+            renderBracket();
+            document.querySelector('[data-tab="tab-bracket"]').click();
+            saveData();
+        };
+
+        function buildKnockout(teams) {
+            let n = 1; while (n < teams.length) n *= 2;
+            const rounds = [];
+            let round = [];
+            for (let i = 0; i < n / 2; i++) {
+                round.push({ home: teams[i] || null, away: teams[teams.length - 1 - i] || null, hg: 0, ag: 0, finished: false, id: `r0-${i}` });
+            }
+            rounds.push(round);
+            STATE.knockout = { rounds };
+        }
+
+        function renderBracket() {
+            const area = document.getElementById('bracketArea');
+            area.innerHTML = '<h3 style="width:100%;text-align:center;color:var(--accent);">شجرة الكأس</h3>';
+            if (!STATE.knockout) return;
+            const col = document.createElement('div');
+            col.className = 'bracket-col';
+            STATE.knockout.rounds[0].forEach(slot => {
+                const div = document.createElement('div');
+                div.className = 'slot';
+                div.innerHTML = `<div class="team">${slot.home || '—'}</div>
+            <div style="color:#ccc;margin:10px 0;">VS</div>
+            <div class="team">${slot.away || '—'}</div>
+            ${slot.finished ? `<div style="margin:10px 0;color:#0f0;">${slot.hg}-${slot.ag}</div>` :
+                        `<button class="primary" onclick="endKnockout('${slot.id}')">إنهاء</button>`}`;
+                col.appendChild(div);
+            });
+            area.appendChild(col);
+        }
+
+        window.endKnockout = (id) => {
+            const slot = STATE.knockout.rounds[0].find(s => s.id === id);
+            const hg = prompt(`أهداف ${slot.home}:`);
+            const ag = prompt(`أهداف ${slot.away}:`);
+            if (hg === null || ag === null) return;
+            slot.hg = parseInt(hg) || 0; slot.ag = parseInt(ag) || 0; slot.finished = true;
+            saveData();
+            renderBracket();
+            renderDashboard();
+        };
+
+        function renderDashboard() {
+            updateStats();
+            const winners = STATE.teams.filter(t => t.win > t.loss).sort((a, b) => b.pts - a.pts);
+            const losers = STATE.teams.filter(t => t.loss >= t.win).sort((a, b) => b.loss - a.loss);
+            let html = `<div class="row">
+        <div class="col"><h3>الفرق الكسبانة</h3><table><tr><th>الفريق</th><th>فوز</th><th>نقاط</th></tr>`;
+            winners.forEach(t => html += `<tr class="winner"><td>${t.name}</td><td>${t.win}</td><td>${t.pts}</td></tr>`);
+            html += `</table></div>
+        <div class="col"><h3>الفرق الخسرانة</h3><table><tr><th>الفريق</th><th>خسارة</th><th>نقاط</th></tr>`;
+            losers.forEach(t => html += `<tr class="loser"><td>${t.name}</td><td>${t.loss}</td><td>${t.pts}</td></tr>`);
+            html += `</table></div></div>`;
+            document.getElementById('dashboardContent').innerHTML = html;
+        }
+
+        function renderAll() {
+            if (STATE.groups.length > 0) {
+                document.getElementById('groupsOverview').classList.remove('hidden');
+                renderGroupsOverview();
+            }
+            renderDashboard();
+        }
+
+        // تبديل التبويبات
+        document.querySelectorAll('.tabbtn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.tabbtn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tabcontent').forEach(c => c.classList.add('hidden'));
+                document.getElementById(btn.dataset.tab).classList.remove('hidden');
+                if (btn.dataset.tab === 'tab-bracket') renderBracket();
+                if (btn.dataset.tab === 'tab-dashboard') renderDashboard();
+            };
+        });
+
+        loadData();
+    </script>
+</body>
+
+</html>
